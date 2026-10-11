@@ -1,0 +1,28 @@
+{
+  "name": "brewmate",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Brewmate — a walkable 3D cafe companion powered by Gemini. Non-chat, spatial interface.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@google/generative-ai": "0.21.0",
+    "@react-three/drei": "9.114.0",
+    "@react-three/fiber": "8.17.10",
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "three": "0.169.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.16.11",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "@types/three": "0.169.0",
+    "typescript": "5.6.3"
+  }
+}
