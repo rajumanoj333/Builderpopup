@@ -46,12 +46,12 @@ export default function OrderCup({
       {/* Cup */}
       <mesh castShadow>
         <cylinderGeometry args={[0.12, 0.09, 0.26, 20]} />
-        <meshStandardMaterial color="#f4efe9" roughness={0.4} />
+        <meshStandardMaterial color="#ffffff" roughness={0.4} />
       </mesh>
       {/* Lid */}
       <mesh position={[0, 0.15, 0]}>
         <cylinderGeometry args={[0.13, 0.13, 0.04, 20]} />
-        <meshStandardMaterial color="#8a5a3c" />
+        <meshStandardMaterial color="#00754a" />
       </mesh>
       {/* Steam puffs */}
       {[0, 1, 2].map((i) => (
@@ -70,9 +70,10 @@ export default function OrderCup({
       <Html position={[0, 0.5, 0]} center distanceFactor={7}>
         <div
           style={{
-            background: done ? "rgba(60,120,70,0.92)" : "rgba(18,14,22,0.9)",
-            border: "1px solid rgba(255,196,140,0.4)",
-            color: "#f4efe9",
+            background: done ? "rgba(0,117,74,0.96)" : "rgba(255,255,255,0.96)",
+            border: "1px solid rgba(0,117,74,0.18)",
+            boxShadow: "0 12px 32px rgba(0,63,42,0.14)",
+            color: done ? "#ffffff" : "#1e3932",
             padding: "6px 10px",
             borderRadius: 10,
             fontSize: 12,

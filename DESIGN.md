@@ -5,7 +5,7 @@
 **Hackathon:** Builder Pop-Up — "The Café Companion"
 **Mandatory tech:** Google Cloud Run (hosting) · Gemini APIs (intelligence)
 **Stack:** Next.js 14 (App Router) · Three.js via `@react-three/fiber` + `drei` · TypeScript
-**GCP project:** `builder-pop-uop` (project number `390317977037`)
+**GCP project:** `manim-461406` (project number `886440887604`)
 
 ---
 
@@ -144,17 +144,17 @@ Default model: `gemini-1.5-flash` (fast + cheap for interactive use), overridabl
 
 ## 9. Cloud Run deployment plan
 
-Target: project `builder-pop-uop`.
+Target: project `manim-461406`.
 
 ```bash
 # 1. One-time: enable services
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com \
-  cloudbuild.googleapis.com --project builder-pop-uop
+  cloudbuild.googleapis.com --project manim-461406
 
 # 2. Build + deploy from source (Cloud Build packs the Dockerfile)
 gcloud run deploy brewmate \
   --source . \
-  --project builder-pop-uop \
+  --project manim-461406 \
   --region us-central1 \
   --allow-unauthenticated \
   --port 3000 \

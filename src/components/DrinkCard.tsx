@@ -38,7 +38,7 @@ export default function DrinkCard({
     );
   });
 
-  const accent = drink.temp === "iced" ? "#8ec5ff" : "#ffb27a";
+  const accent = drink.temp === "iced" ? "#00754a" : "#1e3932";
 
   return (
     <group
@@ -80,7 +80,7 @@ export default function DrinkCard({
           style={{
             width: 150,
             textAlign: "center",
-            color: "#f4efe9",
+            color: "#1e3932",
             fontFamily: "system-ui, sans-serif",
             pointerEvents: "none",
             userSelect: "none",
@@ -94,7 +94,7 @@ export default function DrinkCard({
             {drink.blurb}
           </div>
           {highlighted ? (
-            <div style={{ fontSize: 10, marginTop: 6, color: "#ffd9ab" }}>
+            <div style={{ fontSize: 10, marginTop: 6, color: "#00754a" }}>
               ★ Today&apos;s pick for you
             </div>
           ) : null}

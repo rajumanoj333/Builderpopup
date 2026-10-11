@@ -39,7 +39,8 @@ Menu: ${JSON.stringify(menuForPrompt)}
 Rules:
 - Prefer lower caffeine late in the day (after 15:00).
 - Avoid repeating the most recent history item if possible.
-- Keep the reason to one friendly sentence (max 18 words), no emojis.
+- Explain the choice in plain English using no more than 8 words.
+- Avoid marketing phrases, metaphors, and emojis.
 Respond as JSON: {"drinkId": string, "reason": string}`;
 
   const ai = await geminiJson<{ drinkId: string; reason: string }>(prompt);
@@ -60,8 +61,8 @@ Respond as JSON: {"drinkId": string, "reason": string}`;
       .find((d) => !history.includes(d.id)) || MENU[0];
 
   const reason = late
-    ? "Lighter lift for the afternoon so your evening stays yours."
-    : "A proper morning kick to open the day with focus.";
+    ? "A lower-caffeine choice for this afternoon."
+    : "A smooth pick for your morning.";
 
   const result: RecoResult = { drinkId: pick.id, reason, source: "mock" };
   return NextResponse.json(result);

@@ -35,8 +35,8 @@ export default function Mascot({
   });
 
   const bodyColor = new THREE.Color().lerpColors(
-    new THREE.Color("#8a5a3c"),
-    new THREE.Color("#d98a4e"),
+    new THREE.Color("#1e3932"),
+    new THREE.Color("#00754a"),
     (mood + 1) / 2
   );
 
@@ -64,16 +64,17 @@ export default function Mascot({
       {/* Little apron badge */}
       <mesh position={[0, 0.55, 0.33]}>
         <circleGeometry args={[0.08, 20]} />
-        <meshStandardMaterial color="#ffd9ab" />
+        <meshStandardMaterial color="#d4e9e2" />
       </mesh>
 
       {speech ? (
         <Html position={[0, 1.8, 0]} center distanceFactor={8}>
           <div
             style={{
-              background: "rgba(18,14,22,0.9)",
-              border: "1px solid rgba(255,196,140,0.4)",
-              color: "#f4efe9",
+              background: "rgba(255,255,255,0.96)",
+              border: "1px solid rgba(0,117,74,0.18)",
+              boxShadow: "0 12px 32px rgba(0,63,42,0.14)",
+              color: "#1e3932",
               padding: "8px 12px",
               borderRadius: 12,
               fontSize: 13,

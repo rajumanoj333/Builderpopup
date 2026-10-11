@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
 Current average wait: ${baseMinutes} minutes. Room occupancy: ${Math.round(
     room.occupancy * 100
   )}%. Drink id: ${drinkId || "unknown"}.
-Give an ETA in minutes (integer, within 1-20) and a single cheerful spoken line (max 14 words) telling them it's being made.
+Give an ETA in minutes (integer, within 1-20) and one clear sentence (max 8 words) saying the drink is being prepared.
+Avoid marketing language and emojis.
 Respond as JSON: {"minutes": number, "narration": string}`;
 
   const ai = await geminiJson<{ minutes: number; narration: string }>(prompt);
@@ -41,7 +42,7 @@ Respond as JSON: {"minutes": number, "narration": string}`;
 
   const result: EtaResult = {
     minutes: baseMinutes,
-    narration: `On it! Your drink should be ready in about ${baseMinutes} minutes.`,
+    narration: `Your drink will be ready in ${baseMinutes} minutes.`,
     source: "mock",
   };
   return NextResponse.json(result);

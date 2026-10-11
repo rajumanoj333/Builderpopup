@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Deploy Brewmate to Cloud Run on project builder-pop-uop.
+# Deploy Brewmate to Cloud Run on project manim-461406.
 # Usage: ./deploy.sh   (requires: gcloud auth login, and a GEMINI_API_KEY secret)
 set -euo pipefail
 
-PROJECT="builder-pop-uop"
+PROJECT="manim-461406"
 REGION="${REGION:-us-central1}"
 SERVICE="brewmate"
 SECRET="gemini-api-key"

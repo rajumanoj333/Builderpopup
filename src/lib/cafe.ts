@@ -9,25 +9,22 @@ export interface Drink {
   tags: string[];
   temp: DrinkTemp;
   priceCents: number;
-  // Approximate caffeine so the recommender can reason about time of day.
   caffeineMg: number;
 }
 
 export interface CafeTable {
   id: string;
-  x: number; // world position in the room
+  x: number;
   z: number;
+  seats: number;
+  occupiedSeats: number;
   occupied: boolean;
-  // Anonymized shared-interest tags shown as floating motes.
   interests: string[];
 }
 
 export interface RoomState {
-  // 0..1 how full the room is (drives ambient figures + staff heatmap).
   occupancy: number;
-  // -1..1 aggregate sentiment (drives light color temperature).
   sentiment: number;
-  // Minutes.
   avgWaitMinutes: number;
   tables: CafeTable[];
   updatedAt: string;
@@ -37,7 +34,7 @@ export const MENU: Drink[] = [
   {
     id: "cortado",
     name: "Cortado",
-    blurb: "Equal parts espresso and warm milk. Small, strong, smooth.",
+    blurb: "Espresso softened with warm milk.",
     tags: ["espresso", "milky", "classic"],
     temp: "hot",
     priceCents: 420,
@@ -45,9 +42,9 @@ export const MENU: Drink[] = [
   },
   {
     id: "filter",
-    name: "Single-Origin Filter",
-    blurb: "Bright, floral pour-over that changes weekly.",
-    tags: ["black", "bright", "nerdy"],
+    name: "Fresh Filter",
+    blurb: "Bright, smooth, and freshly brewed.",
+    tags: ["black", "bright"],
     temp: "hot",
     priceCents: 450,
     caffeineMg: 120,
@@ -55,7 +52,7 @@ export const MENU: Drink[] = [
   {
     id: "iced-latte",
     name: "Iced Oat Latte",
-    blurb: "Cold, creamy, oat-forward. The afternoon reset.",
+    blurb: "Espresso and oat milk, served cold.",
     tags: ["milky", "cold", "mellow"],
     temp: "iced",
     priceCents: 520,
@@ -63,8 +60,8 @@ export const MENU: Drink[] = [
   },
   {
     id: "matcha",
-    name: "Ceremonial Matcha",
-    blurb: "Grassy, calm, steady lift without the jitters.",
+    name: "Matcha Latte",
+    blurb: "Smooth matcha with steamed milk.",
     tags: ["green", "calm", "no-coffee"],
     temp: "hot",
     priceCents: 540,
@@ -72,17 +69,17 @@ export const MENU: Drink[] = [
   },
   {
     id: "cold-brew",
-    name: "24h Cold Brew",
-    blurb: "Slow-steeped, bold, low-acid. Built for deep work.",
-    tags: ["black", "cold", "strong", "focus"],
+    name: "Cold Brew",
+    blurb: "Slow-steeped and refreshingly bold.",
+    tags: ["black", "cold", "strong"],
     temp: "iced",
     priceCents: 500,
     caffeineMg: 200,
   },
   {
     id: "chai",
-    name: "House Masala Chai",
-    blurb: "Spiced, cozy, simmered with cardamom and ginger.",
+    name: "Masala Chai",
+    blurb: "Warm spices with steamed milk.",
     tags: ["spiced", "cozy", "milky", "no-coffee"],
     temp: "hot",
     priceCents: 460,
@@ -91,28 +88,42 @@ export const MENU: Drink[] = [
 ];
 
 export function drinkById(id: string): Drink | undefined {
-  return MENU.find((d) => d.id === id);
+  return MENU.find((drink) => drink.id === id);
 }
 
-// Deterministic-ish mock room so the staff view has life without a backend.
+export function availableSeats(table: CafeTable): number {
+  return Math.max(0, table.seats - table.occupiedSeats);
+}
+
 export function mockRoomState(now = new Date()): RoomState {
   const hour = now.getHours();
-  // Morning + lunch rushes.
   const rushMorning = Math.max(0, 1 - Math.abs(hour - 9) / 3);
   const rushLunch = Math.max(0, 1 - Math.abs(hour - 13) / 3);
   const occupancy = Math.min(1, 0.2 + rushMorning * 0.7 + rushLunch * 0.6);
 
-  const tables: CafeTable[] = [
-    { id: "t1", x: -3, z: -2, occupied: occupancy > 0.3, interests: ["indie games", "filter coffee"] },
-    { id: "t2", x: 0, z: -3, occupied: occupancy > 0.5, interests: ["design", "vinyl"] },
-    { id: "t3", x: 3, z: -2, occupied: occupancy > 0.7, interests: ["startups", "running"] },
-    { id: "t4", x: -2, z: 1, occupied: occupancy > 0.6, interests: ["books", "matcha"] },
-    { id: "t5", x: 2, z: 1, occupied: occupancy > 0.8, interests: ["photography", "travel"] },
+  const tableLayout = [
+    { id: "T1", x: -3, z: -2, interests: ["indie games", "filter coffee"] },
+    { id: "T2", x: 0, z: -3, interests: ["design", "vinyl"] },
+    { id: "T3", x: 3, z: -2, interests: ["startups", "running"] },
+    { id: "T4", x: -2, z: 1, interests: ["books", "matcha"] },
+    { id: "T5", x: 2, z: 1, interests: ["photography", "travel"] },
   ];
+
+  let seatsToFill = Math.round(occupancy * tableLayout.length * 2);
+  const tables: CafeTable[] = tableLayout.map((table) => {
+    const occupiedSeats = Math.min(2, seatsToFill);
+    seatsToFill -= occupiedSeats;
+    return {
+      ...table,
+      seats: 2,
+      occupiedSeats,
+      occupied: occupiedSeats === 2,
+    };
+  });
 
   return {
     occupancy,
-    sentiment: 0.55 - occupancy * 0.4, // busier => slightly more strained
+    sentiment: 0.55 - occupancy * 0.4,
     avgWaitMinutes: Math.round(3 + occupancy * 9),
     tables,
     updatedAt: now.toISOString(),

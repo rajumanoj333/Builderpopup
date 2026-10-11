@@ -30,8 +30,8 @@ function predictBusy(occupancy: number): { label: string; level: number } {
 function TopDownRoom({ room }: { room: RoomSummary }) {
   // Sentiment -> warm/cool heat tint for the whole floor.
   const floorColor = new THREE.Color().lerpColors(
-    new THREE.Color("#2d3a6b"),
-    new THREE.Color("#6b3a2d"),
+    new THREE.Color("#d4e9e2"),
+    new THREE.Color("#00754a"),
     (room.sentiment + 1) / 2
   );
 
@@ -49,7 +49,7 @@ function TopDownRoom({ room }: { room: RoomSummary }) {
       {/* Counter marker */}
       <mesh position={[0, 0.1, -5]}>
         <boxGeometry args={[6, 0.2, 1.2]} />
-        <meshStandardMaterial color="#8a5a3c" />
+        <meshStandardMaterial color="#00754a" />
       </mesh>
 
       {/* Tables with occupancy color + interest motes */}
@@ -58,9 +58,9 @@ function TopDownRoom({ room }: { room: RoomSummary }) {
           <mesh position={[0, 0.1, 0]}>
             <cylinderGeometry args={[0.5, 0.5, 0.2, 24]} />
             <meshStandardMaterial
-              color={t.occupied ? "#ff9f68" : "#4a4a55"}
-              emissive={t.occupied ? "#ff6a3c" : "#000000"}
-              emissiveIntensity={t.occupied ? 0.4 : 0}
+              color={t.occupied ? "#000000" : t.occupiedSeats > 0 ? "#00754a" : "#d4e9e2"}
+              emissive={t.occupied ? "#000000" : "#00754a"}
+              emissiveIntensity={t.occupied ? 0 : 0.18}
             />
           </mesh>
           {/* Interest motes floating above occupied tables */}
@@ -69,8 +69,8 @@ function TopDownRoom({ room }: { room: RoomSummary }) {
               <mesh key={i} position={[(i - 0.5) * 0.3, 0.6 + i * 0.15, 0]}>
                 <sphereGeometry args={[0.06, 10, 10]} />
                 <meshStandardMaterial
-                  color="#8ec5ff"
-                  emissive="#8ec5ff"
+                  color="#ffffff"
+                  emissive="#d4e9e2"
                   emissiveIntensity={0.6}
                 />
               </mesh>
@@ -109,7 +109,7 @@ export default function StaffPage() {
       {/* HUD panels */}
       <div className="hud" style={{ top: 16, left: 16 }}>
         <div className="badge">
-          Staff god-view{room ? ` · ${room.source === "gemini" ? "Gemini live" : "demo mode"}` : ""}
+          Room overview{room ? ` · ${room.source === "gemini" ? "Gemini live" : "demo mode"}` : ""}
         </div>
       </div>
       <div className="hud" style={{ top: 16, right: 16 }}>
@@ -156,7 +156,7 @@ export default function StaffPage() {
               style={{
                 height: "100%",
                 width: `${Math.round(busy.level * 100)}%`,
-                background: "linear-gradient(90deg,#ffd9ab,#ff6a3c)",
+                background: "linear-gradient(90deg,#d4e9e2,#00754a)",
               }}
             />
           </div>
@@ -173,7 +173,7 @@ export default function StaffPage() {
       </div>
 
       <Canvas shadows camera={{ position: [0, 12, 6], fov: 50 }}>
-        <color attach="background" args={["#0d0b10"]} />
+        <color attach="background" args={["#d4e9e2"]} />
         {room ? (
           <TopDownRoom room={room} />
         ) : (
